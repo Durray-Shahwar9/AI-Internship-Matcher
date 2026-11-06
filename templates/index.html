@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Find My Internship | Internlytic Internship Matcher</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232dd4bf'/%3E%3Cpath d='M16 7l2.2 6.3L25 15.5l-6.8 2.2L16 24l-2.2-6.3L7 15.5l6.8-2.2z' fill='%2304121a'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="glow glow-a" aria-hidden="true"></div>
+  <div class="glow glow-b" aria-hidden="true"></div>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="logo" href="{{ url_for('index') }}">
+        <span class="logo-mark"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>
+        Internlytic
+      </a>
+      <span class="pill">AI Internship Matcher</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <span class="pill pill-soft"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>{{ programs|length }} active programs</span>
+      <h1>Find the internship that actually fits you.</h1>
+      <p class="lead">Drop your CV or tick your skills. We compare them with our live program list and show your match, your skill gaps and where to apply. No guesswork, no made-up scores.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#matcher"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Find my internship</a>
+        <a class="btn btn-ghost" href="#programs">Explore programs</a>
+      </div>
+      <ol class="steps">
+        <li><b>1</b><span>Upload CV</span></li>
+        <li><b>2</b><span>Tag skills</span></li>
+        <li><b>3</b><span>AI match</span></li>
+        <li><b>4</b><span>See results</span></li>
+      </ol>
+    </section>
+
+    {% if error %}
+    <div class="alert" role="alert">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M12 8v5m0 3h.01M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
+
+    <form id="match-form" class="card" action="{{ url_for('match') }}" method="post" enctype="multipart/form-data">
+      <h2 id="matcher">Build your profile</h2>
+
+      <div class="group">
+        <span class="label">Upload your CV <em>PDF or DOCX, up to {{ max_mb }} MB</em></span>
+        <label class="drop" for="cv">
+          <svg class="ic ic-lg" viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5 5 5M4 20h16"/></svg>
+          <strong id="file-name">Tap to choose your CV</strong>
+          <small>No CV? Skip this and pick skills below.</small>
+        </label>
+        <input id="cv" name="cv" type="file" accept=".pdf,.docx" class="sr-only">
+      </div>
+
+      <fieldset class="group">
+        <legend class="label">Your technical skills</legend>
+        <div class="chips">
+          {% for skill in skills %}
+          <label class="chip">
+            <input type="checkbox" name="skills" value="{{ skill }}" {% if skill in form.get('selected', []) %}checked{% endif %}>
+            <span>{{ skill }}</span>
+          </label>
+          {% endfor %}
+        </div>
+        <label class="label sub" for="typed_skills">Anything else? <em>separate with commas</em></label>
+        <input id="typed_skills" name="typed_skills" type="text" placeholder="e.g. sklearn, GitHub, Selenium" value="{{ form.get('typed', '') }}">
+      </fieldset>
+
+      <fieldset class="group">
+        <legend class="label">Your interests <em>optional</em></legend>
+        <div class="chips">
+          {% for track in tracks %}
+          <label class="chip chip-alt">
+            <input type="checkbox" name="interests" value="{{ track }}" {% if track in form.get('interests', []) %}checked{% endif %}>
+            <span>{{ track }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <fieldset class="group">
+        <legend class="label">Experience level</legend>
+        <div class="segmented">
+          {% for value, title, hint in levels %}
+          <label class="seg">
+            <input type="radio" name="level" value="{{ value }}" {% if form.get('level', 'beginner') == value %}checked{% endif %}>
+            <span><strong>{{ title }}</strong><small>{{ hint }}</small></span>
+          </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <p class="privacy">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>
+        <span>Your CV is read in memory to find skills. We never store your file or your data after the results page loads.</span>
+      </p>
+
+      <button id="submit-btn" class="btn btn-primary btn-block" type="submit">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>
+        <span id="submit-label">Find my internship</span>
+      </button>
+    </form>
+
+    <section id="programs" class="section">
+      <h2>Programs we match against</h2>
+      <p class="muted">Every recommendation comes from this list. Nothing is invented.</p>
+      <div class="grid">
+        {% for p in programs %}
+        <article class="mini">
+          <div class="mini-head">
+            <h3>{{ p.name }}</h3>
+            <span class="pill pill-soft">{{ p.track }}</span>
+          </div>
+          <p class="muted">{{ p.eligibility }}</p>
+          <div class="tags">
+            {% for s in p.required_skills %}<span class="tag">{{ s }}</span>{% endfor %}
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>How the score works</h2>
+      <div class="formula">
+        <div><b>80</b><span>points from required skills you already have</span></div>
+        <div><b>20</b><span>points for experience fit with the program</span></div>
+      </div>
+      <p class="muted">Programs above your experience level are hidden. Your interests only break ties, they never change the score.</p>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="wrap">Internlytic Technologies &copy; 2026 &middot; AI &amp; Machine Learning Track</div></footer>
+
+  <script>
+    var fileInput = document.getElementById('cv');
+    var fileName = document.getElementById('file-name');
+    fileInput.addEventListener('change', function () {
+      fileName.textContent = fileInput.files.length ? fileInput.files[0].name : 'Tap to choose your CV';
+    });
+    document.getElementById('match-form').addEventListener('submit', function () {
+      var btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      document.getElementById('submit-label').textContent = 'Analyzing your profile...';
+    });
+  </script>
+</body>
+</html>

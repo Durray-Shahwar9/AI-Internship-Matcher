@@ -1,0 +1,101 @@
+{
+  "_note": "Replace the programs below with the OFFICIAL Internlytic catalogue (names, skills, apply links). The matcher only recommends what is listed here.",
+  "programs": [
+    {
+      "id": "frontend-dev",
+      "name": "Frontend Development Internship",
+      "track": "Web Development",
+      "required_skills": ["HTML", "CSS", "JavaScript", "Responsive Layouts", "React", "Git"],
+      "min_level": "beginner",
+      "ideal_level": "beginner",
+      "eligibility": "Open to students with basic HTML and CSS knowledge.",
+      "prerequisites": ["Basic HTML and CSS", "A GitHub profile or small portfolio"],
+      "status": "active",
+      "apply_url": "https://example.com/apply/frontend-dev"
+    },
+    {
+      "id": "backend-dev",
+      "name": "Backend Development Internship",
+      "track": "Web Development",
+      "required_skills": ["Python", "Flask", "REST APIs", "SQL", "Databases", "Git"],
+      "min_level": "beginner",
+      "ideal_level": "intermediate",
+      "eligibility": "Open to students who can write basic Python and SQL.",
+      "prerequisites": ["One backend language", "Basic SQL queries"],
+      "status": "active",
+      "apply_url": "https://example.com/apply/backend-dev"
+    },
+    {
+      "id": "fullstack-dev",
+      "name": "Full-Stack Web Development Internship",
+      "track": "Web Development",
+      "required_skills": ["HTML", "CSS", "JavaScript", "React", "Node.js", "SQL", "REST APIs", "Git"],
+      "min_level": "intermediate",
+      "ideal_level": "intermediate",
+      "eligibility": "For students who have built at least one project with a frontend and an API.",
+      "prerequisites": ["One full project with frontend and API", "Git workflow experience"],
+      "status": "active",
+      "apply_url": "https://example.com/apply/fullstack-dev"
+    },
+    {
+      "id": "uiux-design",
+      "name": "UI/UX Design Internship",
+      "track": "Design",
+      "required_skills": ["Figma", "Wireframing", "Prototyping", "UX Research", "Responsive Layouts"],
+      "min_level": "beginner",
+      "ideal_level": "beginner",
+      "eligibility": "Open to students with an interest in design and basic Figma use.",
+      "prerequisites": ["A design case study or portfolio", "Familiarity with Figma"],
+      "status": "active",
+      "apply_url": "https://example.com/apply/uiux-design"
+    },
+    {
+      "id": "ai-ml",
+      "name": "AI & Machine Learning Internship",
+      "track": "AI & ML",
+      "required_skills": ["Python", "Machine Learning", "Pandas", "NumPy", "Scikit-learn", "Data Analysis", "SQL"],
+      "min_level": "beginner",
+      "ideal_level": "intermediate",
+      "eligibility": "Open to students comfortable with Python and basic statistics.",
+      "prerequisites": ["Python fluency", "Basic statistics"],
+      "status": "active",
+      "apply_url": "https://example.com/apply/ai-ml"
+    },
+    {
+      "id": "cloud-devops",
+      "name": "Cloud & DevOps Internship",
+      "track": "Cloud & DevOps",
+      "required_skills": ["Docker", "Linux", "Git", "CI/CD", "Cloud", "Monitoring", "Python"],
+      "min_level": "intermediate",
+      "ideal_level": "intermediate",
+      "eligibility": "For students comfortable with the Linux command line.",
+      "prerequisites": ["Linux command line", "Basic networking"],
+      "status": "active",
+      "apply_url": "https://example.com/apply/cloud-devops"
+    },
+    {
+      "id": "python-automation",
+      "name": "Python & Automation Internship",
+      "track": "Python",
+      "required_skills": ["Python", "Web Scraping", "Automation", "Excel", "Pandas", "Git"],
+      "min_level": "beginner",
+      "ideal_level": "beginner",
+      "eligibility": "Open to students who know Python basics.",
+      "prerequisites": ["Python basics: loops, functions, files"],
+      "status": "active",
+      "apply_url": "https://example.com/apply/python-automation"
+    },
+    {
+      "id": "prompt-engineering",
+      "name": "Prompt Engineering Internship",
+      "track": "AI & ML",
+      "required_skills": ["Prompt Engineering", "LLMs", "Python", "NLP", "Data Analysis"],
+      "min_level": "beginner",
+      "ideal_level": "beginner",
+      "eligibility": "Open to students who actively use LLM tools.",
+      "prerequisites": ["Hands-on use of at least one LLM", "Clear written communication"],
+      "status": "active",
+      "apply_url": "https://example.com/apply/prompt-engineering"
+    }
+  ]
+}

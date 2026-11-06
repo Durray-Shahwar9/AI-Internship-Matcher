@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your matches | Internlytic Internship Matcher</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232dd4bf'/%3E%3Cpath d='M16 7l2.2 6.3L25 15.5l-6.8 2.2L16 24l-2.2-6.3L7 15.5l6.8-2.2z' fill='%2304121a'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="glow glow-a" aria-hidden="true"></div>
+  <div class="glow glow-b" aria-hidden="true"></div>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="logo" href="{{ url_for('index') }}">
+        <span class="logo-mark"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>
+        Internlytic
+      </a>
+      <span class="pill">AI Internship Matcher</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero hero-sm">
+      <h1>Your internship matches</h1>
+      <p class="lead">Based on {{ source }} at {{ level }} level, we found {{ user_skills|length }} matching skill{{ '' if user_skills|length == 1 else 's' }}.</p>
+      <div class="tags">
+        {% for s in user_skills %}<span class="tag tag-good">{{ s }}</span>{% endfor %}
+      </div>
+    </section>
+
+    {% if results %}
+      {% for r in results %}
+      <article class="card result">
+        <div class="result-head">
+          <div class="ring" role="img" aria-label="{{ r.score }} percent match">
+            <svg viewBox="0 0 64 64">
+              <circle class="ring-bg" cx="32" cy="32" r="26"/>
+              <circle class="ring-fg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="{{ (163.4 * (1 - r.score / 100))|round(1) }}"/>
+            </svg>
+            <span>{{ r.score }}%</span>
+          </div>
+          <div>
+            <h2>{{ r.program.name }}</h2>
+            <div class="tags">
+              <span class="pill pill-soft">{{ r.program.track }}</span>
+              {% if r.interest %}<span class="pill pill-hot">Matches your interest</span>{% endif %}
+            </div>
+          </div>
+        </div>
+
+        <p class="why"><strong>Why it matches:</strong> {{ r.why }}</p>
+
+        <div class="skill-block">
+          <span class="label"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Matching skills</span>
+          <div class="tags">{% for s in r.matched %}<span class="tag tag-good">{{ s }}</span>{% endfor %}</div>
+        </div>
+
+        <div class="skill-block">
+          {% if r.missing %}
+          <span class="label label-warn"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>Skills to strengthen</span>
+          <div class="tags">{% for s in r.missing %}<span class="tag tag-gap">{{ s }}</span>{% endfor %}</div>
+          {% else %}
+          <span class="label"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>You have every required skill</span>
+          {% endif %}
+        </div>
+
+        <details>
+          <summary>Eligibility, prerequisites and score breakdown</summary>
+          <p class="muted">{{ r.program.eligibility }}</p>
+          <ul>
+            {% for p in r.program.prerequisites %}<li>{{ p }}</li>{% endfor %}
+          </ul>
+          <table class="breakdown">
+            <tr><td>Skill overlap ({{ r.matched|length }} of {{ r.total }})</td><td>{{ r.skill_points }} / 80</td></tr>
+            <tr><td>Experience fit ({{ 'meets' if r.level_ok else 'below' }} the ideal {{ r.program.ideal_level }} level)</td><td>{{ r.level_points }} / 20</td></tr>
+            <tr class="total"><td>Total</td><td>{{ r.score }} / 100</td></tr>
+          </table>
+        </details>
+
+        <span class="btn btn-soon" aria-disabled="true">
+          <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          Application link coming soon!
+        </span>
+      </article>
+      {% endfor %}
+
+      {% if hidden %}
+      <p class="muted note">{{ hidden }} program{{ '' if hidden == 1 else 's' }} need{{ 's' if hidden == 1 else '' }} a higher experience level and {{ 'was' if hidden == 1 else 'were' }} left out.</p>
+      {% endif %}
+    {% else %}
+      <div class="card empty">
+        <svg class="ic ic-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6m0-6l-6 6"/></svg>
+        <h2>No matching programs yet</h2>
+        <p class="muted">Your skills do not overlap enough with any program open to your level. Add more skills or try a different experience level.</p>
+        {% if hidden %}<p class="muted note">{{ hidden }} program{{ '' if hidden == 1 else 's' }} need a higher experience level.</p>{% endif %}
+      </div>
+    {% endif %}
+
+    <a class="btn btn-ghost" href="{{ url_for('index') }}#matcher">Start over</a>
+  </main>
+
+  <footer class="footer"><div class="wrap">Internlytic Technologies &copy; 2026 &middot; AI &amp; Machine Learning Track</div></footer>
+</body>
+</html>
